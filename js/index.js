@@ -29,6 +29,7 @@ fetch("https://api.myjson.com/bins/j6fnf")
             books = booksJSON;
 
             buildTable();
+            saveData(booksJSON);
         });
     })
     .catch(function(error) {
@@ -48,3 +49,11 @@ function buildTable() {
         }
     };
 }
+
+function saveData(data) {
+    if (window.localStorage) {
+        localStorage.setItem("books", JSON.stringify(data));
+    }
+}
+
+// const books = JSON.parse(localStorage.getItem("books"));
