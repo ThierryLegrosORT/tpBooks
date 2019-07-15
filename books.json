@@ -15,5 +15,11 @@
         "author": "Bob Léponge",
         "price": 1.99,
         "available": false
+    },
+    {
+        "title": "La Guerre des Mondes",
+        "author": "HG Wells",
+        "price": 19.99,
+        "available": false
     }
 ]

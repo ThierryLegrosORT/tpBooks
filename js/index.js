@@ -21,7 +21,7 @@ function render(parentTag, content) {
 // Données
 let books = [];
 
-fetch("./books.json")
+fetch("https://api.myjson.com/bins/j6fnf")
     .then(function(data) {
         // console.log(data.json());
         data.json().then(function(booksJSON) {
