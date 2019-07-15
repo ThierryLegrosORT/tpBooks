@@ -18,42 +18,33 @@ function render(parentTag, content) {
     parentTag.innerHTML += content;
 };
 
-// Données stockées en dur
-const books = [];
+// Données
+let books = [];
 
-function getAjax() {
-    if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
-    } else {
-        return new ActiveXObject("Microsoft.XMLHTTP");
-    }
-}
+fetch("./books.json")
+    .then(function(data) {
+        // console.log(data.json());
+        data.json().then(function(booksJSON) {
+            // console.log(books);
+            books = booksJSON;
 
-function sendRequest(url) {
-    let xhr = getAjax();
-    xhr.responseType = "json";
+            buildTable();
+        });
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readystate === 4 && xhr.status === 200) {
-            //             const json = JSON.parse(xhr.response);
-            console.log();
-
-        }
-        console.log(xhr);
-    };
-
-    xhr.open("GET", url, true /* ou false pour définir synchrone ou asynchrone*/ );
-    xhr.send();
-}
-
-sendRequest("./books.json");
 
 // Code principale
-if (books.length > 0) {
-    tableTag.style.display = "table";
+function buildTable() {
 
-    for (let book of books) {
-        const row = createBookRow(book);
-        render(bodyTableTag, row);
-    }
-};
+    if (books.length > 0) {
+        tableTag.style.display = "table";
+
+        for (let book of books) {
+            const row = createBookRow(book);
+            render(bodyTableTag, row);
+        }
+    };
+}
