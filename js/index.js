@@ -1,49 +1,55 @@
 const bodyTableTag = document.querySelector('tbody');
 const tableTag = document.querySelector('table');
 
-function createBookRow(title, author, price) {
+// Structure HTML
+function createBookRow({ title, author, price, available }) {
+    // const title = b.title;
+    // const author = b.author;
+    // const price = b.price;
+
+    // const { title, author, price } = b;
+
     return `
-    <tr>
+    <tr class="table-${available ? 'success' : 'danger'}">
     <td>${title}</td>
     <td>${author}</td>
     <td>${price} €</td>
     </tr>
     `;
-}
+};
 
+// Gestion de l'affichage
 function render(parentTag, content) {
     parentTag.innerHTML += content;
-}
+};
 
+// Données stockées en dur
 const books = [{
         title: "Il était une fois",
         author: "Moi Meme",
         price: 14.99,
-        avaible: true
+        available: true
     },
     {
         title: "Il était deux fois",
         author: "Meme Moi",
         price: 10.99,
-        avaible: true
+        available: true
     },
     {
         title: "La fin des Haricots",
         author: "Bob Léponge",
         price: 1.99,
-        avaible: false
+        available: false
     },
 ];
 
+// Code principale
 if (books.length > 0) {
     tableTag.style.display = "table";
 
     for (let book of books) {
-        const row = createBookRow(
-            book.title,
-            book.author,
-            book.price
-        );
+        const row = createBookRow(book);
         render(bodyTableTag, row);
     }
-}
+};
