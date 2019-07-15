@@ -1,12 +1,12 @@
 const bodyTableTag = document.querySelector('tbody');
 const tableTag = document.querySelector('table');
 
-function createBookRow() {
+function createBookRow(title, author, price) {
     return `
     <tr>
-    <td>Il était une fois</td>
-    <td>Moi Meme</td>
-    <td>14.99 €</td>
+    <td>${title}</td>
+    <td>${author}</td>
+    <td>${price} €</td>
     </tr>
     `;
 }
@@ -34,3 +34,16 @@ const books = [{
         avaible: false
     },
 ];
+
+if (books.length > 0) {
+    tableTag.style.display = "table";
+
+    for (let book of books) {
+        const row = createBookRow(
+            book.title,
+            book.author,
+            book.price
+        );
+        render(bodyTableTag, row);
+    }
+}
