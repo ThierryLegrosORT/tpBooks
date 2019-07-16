@@ -21,15 +21,53 @@ function render(parentTag, content) {
 // Données
 let books = [];
 
-fetch("https://api.myjson.com/bins/j6fnf")
-    .then(function(data) {
-        // console.log(data.json());
-        data.json().then(function(booksJSON) {
-            // console.log(books);
-            books = booksJSON;
+function getBooks() {
+    if (window.localStorage.getItem("books")) {
+        try {
+            books = JSON.parse(localStorage.getItem("books"));
+        } catch (e) {
+            return [];
+        }
+    }
+    return [];
+}
 
-            buildTable();
+// if (localStorage.getItem("books")) {
+//     books = JSON.parse(localStorage.getItem("books"));
+//     buildTable();
+// }
+
+
+// Vérifier si le nombre de livres récupérés N'EST PAS le même que celui stocké en local (books.length)
+// Si c'est le cas il faut reconstruire l'interface graphique (avec mise à jour de l'objet local)
+// Sinon il faut:
+// Parcourir les livres à dispositions un par un
+// Récupérer le livre correspondant depuis la liste récupérée
+// Vérifier si au moins un prix ou une disponibilité est différente
+// Si oui, reconstruire l'interface graphique
+// Si non, ne rien faire
+
+fetch("./books.json")
+    .then(function(response) {
+        response.json().then(function(booksJSON) {
             saveData(booksJSON);
+
+            if (books.length !== booksJSON.length) {
+                books = booksJSON;
+                buildTable();
+            } else { // même nombre de livres
+                for (let book of books) {
+                    const bookJSON = booksJSON.filter(function(item) {
+                        return item.title === book.title && item.author === book.author;
+                    })[0];
+
+                    if (bookJSON.available !== book.available || bookJSON.price !== book.price) {
+                        books = booksJSON;
+                        buildTable();
+                        break;
+                    }
+                }
+            }
         });
     })
     .catch(function(error) {
@@ -42,6 +80,7 @@ function buildTable() {
 
     if (books.length > 0) {
         tableTag.style.display = "table";
+        bodyTableTag.innerHTML = "";
 
         for (let book of books) {
             const row = createBookRow(book);
